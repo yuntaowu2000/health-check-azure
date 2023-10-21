@@ -32,10 +32,10 @@ app.timer('healthTimeTrigger', {
             context.log('Timer function processed request.');
             await client.connect();
             const collection = client.db(dbName).collection(collectionName);
-            const indexRes = await collection.createIndex({name: 1});
-            context.log(`Creating name index ${indexRes}`);
-            const indexRes2 = await collection.createIndex({status: 1}, {expireAfterSeconds: 7500});
-            context.log(`Creating status index ${indexRes2}`);
+            // const indexRes = await collection.createIndex({name: 1});
+            // context.log(`Creating name index ${indexRes}`);
+            // const indexRes2 = await collection.createIndex({status: 1}, {expireAfterSeconds: 7500});
+            // context.log(`Creating status index ${indexRes2}`);
             // await collection.updateOne({name: serverList[0].name}, { $set: { status: "failed" } }, {upsert: true});
             let failed = [];
             
