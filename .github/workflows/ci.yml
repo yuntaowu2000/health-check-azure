@@ -12,11 +12,13 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
+    - name: 'Checkout GitHub action'
+      uses: actions/checkout@v2
+    - name: 'Setup Node 18'
+      uses: actions/setup-node@v1
       with:
         node-version: "18.x"
     - name: Build Blog
@@ -31,9 +33,9 @@ jobs:
         echo "${{secrets.EMAIL_ID}}" >> .jsonfiles/email.json
         touch .jsonfiles/database.json
         echo "${{secrets.DATA_BASE}}" >> .jsonfiles/database.json
-     - name: 'Run Azure Functions action'
-       uses: Azure/functions-action@v1
-       with:
+    - name: 'Run Azure Functions action'
+      uses: Azure/functions-action@v1
+      with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
