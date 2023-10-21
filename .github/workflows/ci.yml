@@ -1,0 +1,41 @@
+name: mainWorkFlow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  AZURE_FUNCTIONAPP_NAME: trails-game-health # set this to your application's name
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: "18.x"
+    - name: Build Blog
+      run: |
+        npm install
+    - name: write servers/email/database to json
+      run: |
+        mkdir .jsonfiles
+        touch .jsonfiles/server.json
+        echo "${{secrets.SERVER_LIST}}" >> .jsonfiles/servers.json
+        touch .jsonfiles/email.json
+        echo "${{secrets.EMAIL_ID}}" >> .jsonfiles/email.json
+        touch .jsonfiles/database.json
+        echo "${{secrets.DATA_BASE}}" >> .jsonfiles/database.json
+     - name: 'Run Azure Functions action'
+       uses: Azure/functions-action@v1
+       with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+    
