@@ -47,7 +47,7 @@ app.timer('healthTimeTrigger', {
                         let f = {"name" : sd.name, "host" : sd.host, "ip" : sd.ip, "status" : res.statusCode};
                         
                         let prev_record = await collection.findOne({name: sd.name});
-                        if (prev_record.status == "failed") {
+                        if (prev_record !== null && prev_record.status == "failed") {
                             // this is the second failure
                             failed.push(f);
                         }
@@ -58,7 +58,7 @@ app.timer('healthTimeTrigger', {
                     let f = {"name" : sd.name, "host" : sd.host, "ip" : sd.ip, "status" : err};
                     
                     let prev_record = await collection.findOne({name: sd.name});
-                    if (prev_record.status == "failed") {
+                    if (prev_record !== null && prev_record.status == "failed") {
                         // this is the second failure
                         failed.push(f);
                     }
